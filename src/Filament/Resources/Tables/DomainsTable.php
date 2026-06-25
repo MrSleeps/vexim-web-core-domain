@@ -11,6 +11,12 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Actions\Action;
+use VEximweb\Core\EximUser\Filament\Resources\EximUserResource;
+use VEximweb\Core\EximAlias\Filament\Resources\EximAliasResource;
+use VEximweb\Core\EximCatchAll\Filament\Resources\EximCatchAllResource;
+use VEximweb\Core\EximFail\Filament\Resources\EximFailResource;
+use Filament\Support\Icons\Heroicon;
 
 class DomainsTable
 {
@@ -103,6 +109,46 @@ class DomainsTable
                     }),
             ])
             ->recordActions([
+                Action::make('viewLocal')
+                ->icon(Heroicon::Envelope)
+                ->label('')
+                ->tooltip('View local accounts for this domain')
+                    ->url(function ($record) {
+                        return EximUserResource::getUrl('index', [
+                            'tableFilters[domain_id][value]' => $record->id,
+                        ]);
+                    })
+                ->openUrlInNewTab(false),
+                Action::make('viewAlias')
+                ->icon(Heroicon::ArrowUturnRight)
+                ->label('')
+                ->tooltip('View forwarding accounts for this domain')
+                    ->url(function ($record) {
+                        return EximAliasResource::getUrl('index', [
+                            'tableFilters[domain_id][value]' => $record->id,
+                        ]);
+                    })
+                ->openUrlInNewTab(false), 
+                Action::make('viewACatchAll')
+                ->icon(Heroicon::Funnel)
+                ->label('')
+                ->tooltip('View catchall accounts for this domain')
+                    ->url(function ($record) {
+                        return EximCatchAllResource::getUrl('index', [
+                            'tableFilters[domain_id][value]' => $record->id,
+                        ]);
+                    })
+                ->openUrlInNewTab(false), 
+                Action::make('viewFails')
+                ->icon(Heroicon::ExclamationTriangle)
+                ->label('')
+                ->tooltip('View fail accounts for this domain')
+                    ->url(function ($record) {
+                        return EximFailResource::getUrl('index', [
+                            'tableFilters[domain_id][value]' => $record->id,
+                        ]);
+                    })
+                ->openUrlInNewTab(false), 
                 EditAction::make(),
             ])
             ->toolbarActions([
