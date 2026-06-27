@@ -29,7 +29,7 @@ class EditDomain extends EditRecord
                 ->modalHeading('DKIM Configuration')
                 ->modalSubmitAction(false)
                 ->modalCancelActionLabel('Close')
-                ->modalWidth('3xl')  // Make modal wider for better readability
+                ->modalWidth('3xl')
                 ->form(function ($record) {
                     if (!$record->dkim) {
                         return [

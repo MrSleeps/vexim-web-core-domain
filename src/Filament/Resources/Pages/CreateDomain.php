@@ -249,7 +249,7 @@ protected function afterCreate(): void
         }
     }
     
-    \VEximweb\Core\Settings\Filament\Resources\Schemas\DomainForm::runSaveHooks($this->record, $this->data);
+    \VEximweb\Core\Domain\Filament\Resources\Schemas\DomainForm::runSaveHooks($this->record, $this->data);
 }
     
     /**
