@@ -31,7 +31,57 @@ class DomainResource extends Resource
     
     protected static ?int $navigationSort = 1;
 
+    
     public static function form(Schema $schema): Schema
+    {
+        // Get the base form
+        $schema = DomainForm::configure($schema);
+        
+        // Check if DNS Core is installed and try to get extensions
+        if (class_exists(\VEximweb\Plugin\DnsCore\Services\DnsProviderDiscoveryService::class)) {
+            try {
+                $discoveryService = app(\VEximweb\Plugin\DnsCore\Services\DnsProviderDiscoveryService::class);
+                
+                // Make sure the discovery service is booted
+                if (method_exists($discoveryService, 'boot')) {
+                    $discoveryService->boot();
+                }
+                
+                $extensions = $discoveryService->getFormExtensions();
+                
+                if (!empty($extensions)) {
+                    $extensionComponents = [];
+                    
+                    foreach ($extensions as $extension) {
+                        if (isset($extension['components']) && is_callable($extension['components'])) {
+                            $components = $extension['components']();
+                            if (is_array($components)) {
+                                $extensionComponents = array_merge($extensionComponents, $components);
+                            }
+                        }
+                    }
+                    
+                    if (!empty($extensionComponents)) {
+                        \Log::debug('Injecting DNS form extensions', [
+                            'component_count' => count($extensionComponents),
+                            'extension_count' => count($extensions),
+                        ]);
+                        
+                        $schema = $schema->components([
+                            ...$schema->getComponents(),
+                            ...$extensionComponents,
+                        ]);
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::debug('Could not load DNS form extensions: ' . $e->getMessage());
+            }
+        }
+        
+        return $schema;
+    }    
+    
+    public static function form_old(Schema $schema): Schema
     {
         return DomainForm::configure($schema);
     }
