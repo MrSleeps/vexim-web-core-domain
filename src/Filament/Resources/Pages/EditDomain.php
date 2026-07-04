@@ -122,7 +122,6 @@ class EditDomain extends EditRecord
                     try {
                         $dkim = $dkimService->generateKeys($record, 'default');
                         $dnsRecord = $dkim->getDnsRecord();
-                        
                         // This will be picked up by dns-core and routed to the appropriate DNS provider
                         event(new \App\Events\DkimKeyGenerated(
                             zone: $this->record->domain,
