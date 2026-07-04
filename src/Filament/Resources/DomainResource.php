@@ -79,11 +79,6 @@ class DomainResource extends Resource
         }
         
         return $schema;
-    }    
-    
-    public static function form_old(Schema $schema): Schema
-    {
-        return DomainForm::configure($schema);
     }
 
     public static function table(Table $table): Table
