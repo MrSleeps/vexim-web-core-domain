@@ -110,45 +110,41 @@ class DomainsTable
             ])
             ->recordActions([
                 Action::make('viewLocal')
-                ->icon(Heroicon::Envelope)
-                ->label('')
-                ->tooltip('View local accounts for this domain')
+                    ->icon(Heroicon::Envelope)
+                    ->label('')
+                    ->tooltip('View local accounts for this domain')
                     ->url(function ($record) {
-                        return EximUserResource::getUrl('index', [
-                            'tableFilters[domain_id][value]' => $record->id,
-                        ]);
+                        $baseUrl = EximUserResource::getUrl('index');
+                        return $baseUrl . '?filters[domain_id][value]=' . $record->domain_id;
                     })
-                ->openUrlInNewTab(false),
+                    ->openUrlInNewTab(false),
                 Action::make('viewAlias')
-                ->icon(Heroicon::ArrowUturnRight)
-                ->label('')
-                ->tooltip('View forwarding accounts for this domain')
+                    ->icon(Heroicon::ArrowUturnRight)
+                    ->label('')
+                    ->tooltip('View forwarding accounts for this domain')
                     ->url(function ($record) {
-                        return EximAliasResource::getUrl('index', [
-                            'tableFilters[domain_id][value]' => $record->id,
-                        ]);
+                        $baseUrl = EximAliasResource::getUrl('index');
+                        return $baseUrl . '?filters[domain_id][value]=' . $record->domain_id;
                     })
-                ->openUrlInNewTab(false), 
+                    ->openUrlInNewTab(false), 
                 Action::make('viewACatchAll')
-                ->icon(Heroicon::Funnel)
-                ->label('')
-                ->tooltip('View catchall accounts for this domain')
+                    ->icon(Heroicon::Funnel)
+                    ->label('')
+                    ->tooltip('View catchall accounts for this domain')
                     ->url(function ($record) {
-                        return EximCatchAllResource::getUrl('index', [
-                            'tableFilters[domain_id][value]' => $record->id,
-                        ]);
+                        $baseUrl = EximCatchAllResource::getUrl('index');
+                        return $baseUrl . '?filters[domain_id][value]=' . $record->domain_id;
                     })
-                ->openUrlInNewTab(false), 
+                    ->openUrlInNewTab(false), 
                 Action::make('viewFails')
-                ->icon(Heroicon::ExclamationTriangle)
-                ->label('')
-                ->tooltip('View fail accounts for this domain')
+                    ->icon(Heroicon::ExclamationTriangle)
+                    ->label('')
+                    ->tooltip('View fail accounts for this domain')
                     ->url(function ($record) {
-                        return EximFailResource::getUrl('index', [
-                            'tableFilters[domain_id][value]' => $record->id,
-                        ]);
+                        $baseUrl = EximFailResource::getUrl('index');
+                        return $baseUrl . '?filters[domain_id][value]=' . $record->domain_id;
                     })
-                ->openUrlInNewTab(false), 
+                    ->openUrlInNewTab(false), 
                 EditAction::make(),
             ])
             ->toolbarActions([

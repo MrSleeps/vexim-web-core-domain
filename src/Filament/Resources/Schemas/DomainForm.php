@@ -37,11 +37,13 @@ class DomainForm
     public static function configure(Schema $schema): Schema
     {
         $extra = [];
+        
         if (app()->bound('domainform.extenders')) {
             foreach (app('domainform.extenders')['components'] as $extender) {
                 $extra = array_merge($extra, $extender());
             }
         }
+        
 
         return $schema
             ->components([
