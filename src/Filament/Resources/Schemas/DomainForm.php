@@ -3,6 +3,7 @@
 namespace VEximweb\Core\Domain\Filament\Resources\Schemas;
 
 use VEximweb\Core\Data\Models\Setting;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -195,10 +196,8 @@ class DomainForm
 
                 Section::make('Additional Settings')
                     ->schema([
-                        TextInput::make('type')
-                            ->hidden()
-                            ->default('local')
-                            ->maxLength(5),
+                        Hidden::make('type')
+                            ->default('local'),
                         Toggle::make('mailinglists')
                             ->label('Mailing Lists Enabled')
                             ->default(false),
