@@ -2,9 +2,12 @@
 namespace VEximweb\Core\Domain;
 
 use Filament\Panel;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use VEximweb\Core\Data\Models\Domain;
 use VEximweb\Core\Data\Repositories\Interfaces\DomainRepositoryInterface;
 use VEximweb\Core\Data\Repositories\DomainRepository;
+use VEximweb\Core\Domain\Policies\DomainPolicy;
 use VEximweb\Core\Domain\Services\DomainAdminService;
 use VEximweb\Core\Domain\Services\DomainAdminLimitService;
 
@@ -30,6 +33,8 @@ class DomainServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Gate::policy(Domain::class, DomainPolicy::class);
+
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         //$this->loadViewsFrom(__DIR__ . '/../resources/views', 'domain');
         //$this->loadRoutesFrom(__DIR__ . '/../routes/web.php');

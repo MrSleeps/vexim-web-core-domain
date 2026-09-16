@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace VEximweb\Core\Domain\Policies;
 
+use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use VEximweb\Core\Data\Models\Domain;
-use Illuminate\Auth\Access\HandlesAuthorization;
+use VEximweb\Core\Data\Models\User;
 
 class DomainPolicy
 {
@@ -19,7 +20,8 @@ class DomainPolicy
 
     public function view(AuthUser $authUser, Domain $domain): bool
     {
-        return $authUser->can('View:Domain');
+        return $authUser->can('View:Domain')
+            && $this->canAccessDomain($authUser, $domain);
     }
 
     public function create(AuthUser $authUser): bool
@@ -29,12 +31,14 @@ class DomainPolicy
 
     public function update(AuthUser $authUser, Domain $domain): bool
     {
-        return $authUser->can('Update:Domain');
+        return $authUser->can('Update:Domain')
+            && $this->canAccessDomain($authUser, $domain);
     }
 
     public function delete(AuthUser $authUser, Domain $domain): bool
     {
-        return $authUser->can('Delete:Domain');
+        return $authUser->can('Delete:Domain')
+            && $this->canAccessDomain($authUser, $domain);
     }
 
     public function deleteAny(AuthUser $authUser): bool
@@ -44,12 +48,14 @@ class DomainPolicy
 
     public function restore(AuthUser $authUser, Domain $domain): bool
     {
-        return $authUser->can('Restore:Domain');
+        return $authUser->can('Restore:Domain')
+            && $this->canAccessDomain($authUser, $domain);
     }
 
     public function forceDelete(AuthUser $authUser, Domain $domain): bool
     {
-        return $authUser->can('ForceDelete:Domain');
+        return $authUser->can('ForceDelete:Domain')
+            && $this->canAccessDomain($authUser, $domain);
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
@@ -64,7 +70,8 @@ class DomainPolicy
 
     public function replicate(AuthUser $authUser, Domain $domain): bool
     {
-        return $authUser->can('Replicate:Domain');
+        return $authUser->can('Replicate:Domain')
+            && $this->canAccessDomain($authUser, $domain);
     }
 
     public function reorder(AuthUser $authUser): bool
@@ -72,4 +79,18 @@ class DomainPolicy
         return $authUser->can('Reorder:Domain');
     }
 
+    private function canAccessDomain(AuthUser $authUser, Domain $domain): bool
+    {
+        if (! $authUser instanceof User) {
+            return false;
+        }
+
+        if ($authUser->isSystemAdmin()) {
+            return true;
+        }
+
+        return $domain->administrators()
+            ->whereKey($authUser->getKey())
+            ->exists();
+    }
 }
