@@ -68,7 +68,8 @@ class CreateDomain extends CreateRecord
             'sa_refuse' => Setting::get('spam_refuse_threshold', 5),
             'avscan' => Setting::get('default_av_setting', true),
             'spamassassin' => Setting::get('default_spam_setting', false),
-            'blocklist' => Setting::get('default_blocklist_setting', false),
+            'blocklists' => Setting::get('default_blocklist_setting', false),
+            'whitelists' => Setting::get('default_whitelist_setting', false),
             'pipe' => Setting::get('default_pipe_setting', false),
             'generate_dkim' => Setting::get('auto_generate_dkim', false),
         ];
