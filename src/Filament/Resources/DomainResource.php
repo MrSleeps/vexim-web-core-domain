@@ -14,6 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class DomainResource extends Resource
 {
@@ -62,7 +63,7 @@ class DomainResource extends Resource
                     }
                     
                     if (!empty($extensionComponents)) {
-                        \Log::debug('Injecting DNS form extensions', [
+                        Log::debug('Injecting DNS form extensions', [
                             'component_count' => count($extensionComponents),
                             'extension_count' => count($extensions),
                         ]);
